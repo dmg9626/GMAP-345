@@ -38,12 +38,12 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         // Instantiate commands
-        Command shootCommand = new ShootCommand();
+        Command jumpCommand = new JumpCommand();
         Command moveCommand = new MoveCommand();
 
         // TODO: do this more dynamically
         // TODO: pull commands from Actor, rather than operating off same set of commands for each actor
-        commands = new List<Command> { shootCommand, moveCommand };
+        commands = new List<Command> { moveCommand, jumpCommand };
 
         // Set actor to player if null
         if(controlledActor == null)
@@ -66,12 +66,15 @@ public class PlayerController : MonoBehaviour
         // Iterate through each commandType in action queue and execute corresponding command
         foreach(Command.Type commandType in controlledActor.actionQueue)
         {
-            commands.Find(i => i.type == commandType).execute(controlledActor);
+            // commands.Find(i => i.type == commandType).execute(controlledActor);
+            foreach(Command command in commands.FindAll(i => i.type == commandType)) {
+                command.execute(controlledActor);
+            }
         }
 
         // No longer have to execute each command manually
         //moveCommand.execute(actor);
-        //shootCommand.execute(gameObject);
+        //jumpCommand.execute(actor);
     }
 
     /// <summary>
@@ -82,56 +85,6 @@ public class PlayerController : MonoBehaviour
     {
         this.controlledActor = actor;
         Debug.Log("Changed actor to " + actor.name);
-    }
-   
-    /// <summary>
-    /// Destroys the actor gameobject and spawns in a new one to replace it
-    /// </summary>
-    /// <param name="actor">Actor to kill</param>
-    public void KillActor(Actor actor)
-    {
-        Debug.Log(actor.name + " died");
-
-        // Spawn a clone of the actor before destroying (for demo purposes only)
-        CloneActor(actor);
-
-        // Destroy the old one
-        Destroy(actor.gameObject);
-
-        // Find another actor in scene to control if you killed yourself (for demo purposes only)
-        // TODO: remove/change this for actual game; player death should mean game over
-        if (GameController.PlayerController.controlledActor == actor)
-        {
-            Actor newControlActor = FindObjectOfType<Actor>();
-            GameController.PlayerController.SetActor(newControlActor);
-        }
-    }
-
-	/// <summary>
-    /// Spawns clone of provided actor
-    /// </summary>
-    /// <param name="actor">Actor</param>
-    private void CloneActor(Actor actor)
-    {
-        // Reference to prefab
-        UnityEngine.Object actorPrefab;
-
-        // Select between Player and Actor prefabs
-        if (actor.isPlayer)
-        {
-            actorPrefab = Resources.Load("Prefabs/Player");
-        }
-        else
-        {
-            actorPrefab = Resources.Load("Prefabs/Actor");
-        }
-
-        // Instantiate actor from prefab
-        Actor newActor = Instantiate(actorPrefab as GameObject).GetComponent<Actor>();
-
-        // Move it over a bit to distinguish it from dead actor
-        Vector2 offset = new Vector2(UnityEngine.Random.Range(-1F, 1F), UnityEngine.Random.Range(-1F, 1F));
-        newActor.transform.position += (Vector3)offset;
     }
 
 }

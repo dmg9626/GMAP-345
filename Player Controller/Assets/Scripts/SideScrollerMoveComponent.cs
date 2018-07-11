@@ -2,25 +2,49 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SideScrollerMoveComponent : MoveComponent {
+/*
+
+Horizontal MoveComponent - with additional Jump() function added
+
+ */
+
+public class SideScrollerMoveComponent : MoveComponent 
+{
+    /// <summary>
+    /// Speed increase while sprinting
+    /// </summary>
+    public float sprintModifier;
+
+    /// <summary>
+    /// Inital upward speed of jump
+    /// </summary>
+    public float jumpSpeed;
 
     override
     public void ManageMovement(Vector2 input)
     {
-        // Move actor in direction of horizontal input
-        Vector2 movement = ParseHorizontalInput(input);
-        gameObject.GetComponent<Rigidbody2D>().velocity = movement;
+        float speed = moveSpeed;
 
-        // Animate walking if receiving input
-        if (input.x != 0f)
-        {
-            animator.SetBool("Moving", true);
-            AnimateWalk(input);
+        if(Input.GetKey(KeyCode.Space)) {
+            speed += sprintModifier;
         }
-        else
-        {
-            animator.SetBool("Moving", false);
-        }
+
+        // Move actor in direction of horizontal input
+        Vector2 currentVelocity = GetComponent<Rigidbody2D>().velocity;
+        currentVelocity.x = ParseHorizontalInput(input, speed).x;
+        GetComponent<Rigidbody2D>().velocity = currentVelocity;
+
+        // Animate movement according to input
+        AnimateWalk(currentVelocity);
+    }
+
+    /// <summary>
+    /// Makes the player jump
+    /// </summary>
+    override 
+    public void Jump()
+    {
+        GetComponent<Rigidbody2D>().velocity += Vector2.up * jumpSpeed;
     }
 
     /// <summary>
@@ -28,9 +52,9 @@ public class SideScrollerMoveComponent : MoveComponent {
     /// </summary>
     /// <returns>Player movmement vector</returns>
     /// <param name="input">Player input</param>
-    protected Vector2 ParseHorizontalInput(Vector2 input)
+    protected Vector2 ParseHorizontalInput(Vector2 input, float speed)
     {
-        return new Vector2(input.x, 0) * moveSpeed;
+        return new Vector2(input.x, 0) * speed;
     }
 
     /// <summary>
@@ -39,12 +63,19 @@ public class SideScrollerMoveComponent : MoveComponent {
     /// <param name="input">Player input</param>
     protected void AnimateWalk(Vector2 input)
     {
-        // Get current direction
-        currentDirection = (BaseConstants.Direction)animator.GetInteger("Direction");
+        // Animate walking if receiving input
+        if (input.x != 0f) {
+            animator.SetBool("Moving", true);
+        }
+        else {
+            animator.SetBool("Moving", false);
+        }
 
-        // Calculate and set new direction
-        BaseConstants.Direction newDirection = InputToDirection(input.x, true);
-        animator.SetInteger("Direction", (int)newDirection);
+        // Get current direction
+        currentDirection = InputToDirection(input.x, true);
+
+        // Flip sprite horizontally if facing left
+        GetComponent<SpriteRenderer>().flipX = (currentDirection == BaseConstants.Direction.Left);
     }
 
     /// <summary>

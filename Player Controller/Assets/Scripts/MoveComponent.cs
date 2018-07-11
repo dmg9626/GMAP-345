@@ -35,4 +35,9 @@ public class MoveComponent : MonoBehaviour {
     {
         Debug.LogError(name + " | MoveComponent.MangeMovement() not implemented");
     }
+
+    public virtual void Jump()
+    {
+        Debug.LogError(name + " | MoveComponent.Jump() not implemented");
+    }
 }
