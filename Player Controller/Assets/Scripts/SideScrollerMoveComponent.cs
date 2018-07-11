@@ -25,7 +25,8 @@ public class SideScrollerMoveComponent : MoveComponent
     {
         float speed = moveSpeed;
 
-        if(Input.GetKey(KeyCode.Space)) {
+        // Hold down shift to sprint
+        if(Input.GetKey(KeyCode.LeftShift)) {
             speed += sprintModifier;
         }
 
