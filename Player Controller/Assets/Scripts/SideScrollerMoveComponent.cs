@@ -4,7 +4,7 @@ using UnityEngine;
 
 /*
 
-Horizontal MoveComponent - with additional Jump() function added
+Side-scrolling MoveComponent
 
  */
 
