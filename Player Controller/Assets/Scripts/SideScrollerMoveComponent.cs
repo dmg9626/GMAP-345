@@ -4,14 +4,15 @@ using UnityEngine;
 
 public class SideScrollerMoveComponent : MoveComponent {
 
+    override
     public void ManageMovement(Vector2 input)
     {
-        // Move actor in direction of input
-        Vector2 movement = input * moveSpeed;
+        // Move actor in direction of horizontal input
+        Vector2 movement = ParseHorizontalInput(input);
         gameObject.GetComponent<Rigidbody2D>().velocity = movement;
 
         // Animate walking if receiving input
-        if (input.x != 0f || input.y != 0f)
+        if (input.x != 0f)
         {
             animator.SetBool("Moving", true);
             AnimateWalk(input);
@@ -20,6 +21,16 @@ public class SideScrollerMoveComponent : MoveComponent {
         {
             animator.SetBool("Moving", false);
         }
+    }
+
+    /// <summary>
+    /// Parses raw input into horizontal movement (strips vertical component)
+    /// </summary>
+    /// <returns>Player movmement vector</returns>
+    /// <param name="input">Player input</param>
+    protected Vector2 ParseHorizontalInput(Vector2 input)
+    {
+        return new Vector2(input.x, 0) * moveSpeed;
     }
 
     /// <summary>
@@ -32,7 +43,7 @@ public class SideScrollerMoveComponent : MoveComponent {
         currentDirection = (BaseConstants.Direction)animator.GetInteger("Direction");
 
         // Calculate and set new direction
-        BaseConstants.Direction newDirection = ParseInput(input.x, true);
+        BaseConstants.Direction newDirection = InputToDirection(input.x, true);
         animator.SetInteger("Direction", (int)newDirection);
     }
 
@@ -41,7 +52,7 @@ public class SideScrollerMoveComponent : MoveComponent {
     /// </summary>
     /// <param name="input">Player input on horizontal/vertical axis</param>
     /// <param name="horizontal">True if input direction is horizontal, false if vertical</param>
-    protected BaseConstants.Direction ParseInput(float input, bool horizontal)
+    protected BaseConstants.Direction InputToDirection(float input, bool horizontal)
     {
         if (input > 0)
         {
