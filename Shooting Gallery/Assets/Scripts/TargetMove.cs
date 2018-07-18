@@ -19,6 +19,9 @@ public class TargetMove : MonoBehaviour
     /// </summary>
     public Transform pointB;
 
+    // Point to start at
+    public Transform startingPoint;
+
     /// <summary>
     /// Move speed
     /// </summary>
@@ -30,7 +33,7 @@ public class TargetMove : MonoBehaviour
     // Use this for initialization
     void Start ()
     {
-        transform.position = pointA.position;
+        transform.position = startingPoint.position;
 
         rBody = GetComponent<Rigidbody>();
 
