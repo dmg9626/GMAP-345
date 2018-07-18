@@ -36,25 +36,32 @@ public class Bazooka : MonoBehaviour {
     /// </summary>
     GameObject newProjectile;
 
-    /// <summary>
-    /// Amount of bullets in magazine
-    /// </summary>
-    public float clipSize;
+    [Serializable]
+    public class Magazine {
+        /// <summary>
+        /// Amount of bullets in magazine
+        /// </summary>
+        public float clipSize;
 
-    /// <summary>
-    /// Current ammo count
-    /// </summary>
-    float currentAmmo;
+        /// <summary>
+        /// Current ammo count
+        /// </summary>
+        public float currentAmmo;
 
-    /// <summary>
-    /// Duration of reloading
-    /// </summary>
-    public float reloadDuration;
+        /// <summary>
+        /// Duration of reloading
+        /// </summary>
+        public float reloadDuration;
 
-    /// <summary>
-    /// Displays amount of ammo in magazine
-    /// </summary>
-    public Text ammoText;
+        /// <summary>
+        /// Displays amount of ammo in magazine
+        /// </summary>
+        public Text ammoText;
+    }
+
+    public Magazine magazine;
+
+    
 
     /// <summary>
     /// True if currently reloading
@@ -69,7 +76,7 @@ public class Bazooka : MonoBehaviour {
         fireTimer = fireRate;
 
         // Start with full mag of ammo
-        currentAmmo = clipSize;
+        magazine.currentAmmo = magazine.clipSize;
 
         reloading = false;
 	}
@@ -87,7 +94,7 @@ public class Bazooka : MonoBehaviour {
             if(Input.GetMouseButton(0)) {
 
                 // Check if we have ammo
-                if(currentAmmo > 0) {
+                if(magazine.currentAmmo > 0) {
                     Fire();
                 }
                 // Reload if not currently reloading
@@ -97,7 +104,7 @@ public class Bazooka : MonoBehaviour {
             }
         }
 
-        ammoText.text = "Ammo: " + currentAmmo;
+        magazine.ammoText.text = "Ammo: " + magazine.currentAmmo;
 	}
 
     /// <summary>
@@ -112,10 +119,10 @@ public class Bazooka : MonoBehaviour {
         Debug.Log("Reloading gun...");
 
         // Wait reloadDuration seconds
-        yield return new WaitForSeconds(reloadDuration);
+        yield return new WaitForSeconds(magazine.reloadDuration);
 
         // Set ammo to full clip size
-        currentAmmo = clipSize;
+        magazine.currentAmmo = magazine.clipSize;
         Debug.Log("Finished reloading");
 
         reloading = false;
@@ -139,8 +146,9 @@ public class Bazooka : MonoBehaviour {
         fireTimer = 0;
 
         // Decrement ammo count
-        currentAmmo--;
+        magazine.currentAmmo--;
 
-        Debug.Log("Ammo left: " + currentAmmo);
+        Debug.Log("Ammo left: " + magazine.
+            currentAmmo);
     }
 }
