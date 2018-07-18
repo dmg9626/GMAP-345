@@ -1259,7 +1259,7 @@ GameObject:
   - component: {fileID: 1833104311}
   - component: {fileID: 1833104310}
   m_Layer: 0
-  m_Name: Projectile
+  m_Name: Highlight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1427,6 +1427,7 @@ MonoBehaviour:
   projectile: {fileID: 1301595499220988, guid: 26f9e07e1bad04395aaaffb535f8b65a, type: 2}
   fireLocation: {fileID: 861752520}
   projectileSpeed: 800
+  highlight: {fileID: 1833104310}
   magazine:
     clipSize: 30
     currentAmmo: 30
