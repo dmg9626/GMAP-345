@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Bazooka : MonoBehaviour {
 
@@ -50,6 +51,16 @@ public class Bazooka : MonoBehaviour {
     /// </summary>
     public float reloadDuration;
 
+    /// <summary>
+    /// Displays amount of ammo in magazine
+    /// </summary>
+    public Text ammoText;
+
+    /// <summary>
+    /// True if currently reloading
+    /// </summary>
+    bool reloading;
+
 
 	// Use this for initialization
 	void Start ()
@@ -59,6 +70,8 @@ public class Bazooka : MonoBehaviour {
 
         // Start with full mag of ammo
         currentAmmo = clipSize;
+
+        reloading = false;
 	}
 	
 	// Update is called once per frame
@@ -73,14 +86,18 @@ public class Bazooka : MonoBehaviour {
             // Fire on left mouse click
             if(Input.GetMouseButton(0)) {
 
+                // Check if we have ammo
                 if(currentAmmo > 0) {
                     Fire();
                 }
-                else {
+                // Reload if not currently reloading
+                else if(!reloading) {
                     StartCoroutine(Reload());
                 }
             }
         }
+
+        ammoText.text = "Ammo: " + currentAmmo;
 	}
 
     /// <summary>
@@ -89,12 +106,19 @@ public class Bazooka : MonoBehaviour {
     /// <returns></returns>
     private IEnumerator Reload()
     {
+        // Make sure we don't call this Coroutine repeatedly and blow up the stack
+        reloading = true;
+
         Debug.Log("Reloading gun...");
 
+        // Wait reloadDuration seconds
         yield return new WaitForSeconds(reloadDuration);
 
+        // Set ammo to full clip size
         currentAmmo = clipSize;
         Debug.Log("Finished reloading");
+
+        reloading = false;
     }
 
     /// <summary>
