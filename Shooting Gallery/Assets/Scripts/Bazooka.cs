@@ -45,19 +45,23 @@ public class Bazooka : MonoBehaviour {
             
             // Fire on left mouse click
             if(Input.GetMouseButton(0)) {
-                // Spawn new projectile
-                newProjectile = Instantiate(projectile, fireLocation.position, fireLocation.rotation);
-
-                // Fire it forward
-                newProjectile.GetComponent<Rigidbody>().AddForce(fireLocation.forward * projectileSpeed);
-
-
-                // Destroy after 5 seconds
-                Destroy(newProjectile, 5);
-                ResetTimer();
+                Fire();
             }
         }
 	}
+
+    void Fire()
+    {
+        // Spawn new projectile
+        newProjectile = Instantiate(projectile, fireLocation.position, fireLocation.rotation);
+
+        // Fire it forward
+        newProjectile.GetComponent<Rigidbody>().AddForce(fireLocation.forward * projectileSpeed);
+
+        // Destroy after 5 seconds
+        Destroy(newProjectile, 5);
+        ResetTimer();
+    }
 
     void ResetTimer()
     {
