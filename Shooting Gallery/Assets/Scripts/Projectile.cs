@@ -44,5 +44,16 @@ public class Projectile : MonoBehaviour {
         colorModule.color = gradient;
     }
 
+    void OnCollisionEnter(Collision collision)
+    {
+        // Check if collided with Target gameobject
+        if(collision.gameObject.CompareTag("Target")) {
+            Debug.Log("Hit gameobject with tag " + collision.gameObject.tag);
+
+            // Destroy object
+            Destroy(collision.gameObject);
+        }
+    }
+
 
 }
