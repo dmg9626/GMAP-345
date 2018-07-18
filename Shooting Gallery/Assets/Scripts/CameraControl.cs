@@ -10,6 +10,8 @@ public class CameraControl : MonoBehaviour {
 
     public Transform cameraTilt;
 
+    public Transform gun;
+
     public float minTilt;
 
     public float maxTilt;
@@ -24,15 +26,17 @@ public class CameraControl : MonoBehaviour {
         // Set position to player
         transform.position = player.position;
 
+        // Rotate plaeyr left/right
         RotateLocal(player.transform, new Vector3(0, mouseX, 0));
+
+        // Rotate gun up/down
+        RotateWorld(gun.transform, transform.TransformDirection(new Vector3(-mouseY, 0, 0)));
+
+        // Camera tilt up/down
         RotateWorld(cameraTilt.transform, transform.TransformDirection(new Vector3(-mouseY, 0, 0)));
+
+        // Camera yaw left/right
         RotateLocal(transform, new Vector3(0, mouseX, 0));
-    
-        //transform.eulerAngles = player.transform.eulerAngles;
-
-        //Rotate(cameraTilt.transform, new Vector3(mouseY, 0, 0));
-
-        //Debug.Log("Mouse Y: " + mouseY);
     }
 
     /// <summary>
