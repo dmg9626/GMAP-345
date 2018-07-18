@@ -19,10 +19,11 @@ public class CameraControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-
+        // Get mouse input
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
+        // Calculate camera yaw (left/right rotation) and tilt (up/down rotation)
         Vector3 yaw = new Vector3(0, mouseX, 0);
         Vector3 tilt = transform.TransformDirection(new Vector3(-mouseY, 0, 0));
 

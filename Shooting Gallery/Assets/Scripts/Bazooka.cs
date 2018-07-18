@@ -36,6 +36,11 @@ public class Bazooka : MonoBehaviour {
     /// </summary>
     GameObject newProjectile;
 
+    /// <summary>
+    /// Highlight around barrel of gun
+    /// </summary>
+    public MeshRenderer highlight;
+
     [Serializable]
     public class Magazine {
         /// <summary>
@@ -60,8 +65,6 @@ public class Bazooka : MonoBehaviour {
     }
 
     public Magazine magazine;
-
-    
 
     /// <summary>
     /// True if currently reloading
@@ -96,6 +99,8 @@ public class Bazooka : MonoBehaviour {
                 // Check if we have ammo
                 if(magazine.currentAmmo > 0) {
                     Fire();
+
+                    //SetMaterialAlpha(highlight, 1);
                 }
                 // Reload if not currently reloading
                 else if(!reloading) {
@@ -148,7 +153,18 @@ public class Bazooka : MonoBehaviour {
         // Decrement ammo count
         magazine.currentAmmo--;
 
-        Debug.Log("Ammo left: " + magazine.
-            currentAmmo);
+        Debug.Log("Ammo left: " + magazine.currentAmmo);
+    }
+
+    /// <summary>
+    /// Changes alpha value on trim material to create a flashing appearance
+    /// </summary>
+    /// <param name="mRenderer">Mesh renderer to alter material of.</param>
+    /// <param name="alpha">Alpha value.</param>
+    void SetMaterialAlpha(MeshRenderer mRenderer, float alpha)
+    {
+        Color color = mRenderer.material.color;
+        color.a = alpha;
+        mRenderer.material.color = color;
     }
 }
