@@ -1,0 +1,12 @@
+player-cast
+player-die
+player-move
+scorpion-attack
+scorpion-death-0
+scorpion-death-1
+scorpion-move
+
+Warlock's Gauntlet artists - rAum, jackFlower, DrZoliparia, Neil2D
+http://opengameart.org/content/warlocks-gauntlet
+
+All other assets are public domain.
