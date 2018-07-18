@@ -547,8 +547,8 @@ MonoBehaviour:
   mouseSensitivity: 2
   cameraTilt: {fileID: 2015616599}
   gun: {fileID: 1708602612}
-  minTilt: 40
-  maxTilt: 310
+  minTilt: -50
+  maxTilt: 40
 --- !u!4 &484933640
 Transform:
   m_ObjectHideFlags: 0

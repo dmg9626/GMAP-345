@@ -52,6 +52,8 @@ public class CameraControl : MonoBehaviour {
     /// <param name="rotation">Rotation vector.</param>
     void RotateLocal(Transform tform, Vector3 rotation)
     {
+        
+        //Debug.Log(tform.name + " yaw: " + tform.eulerAngles.y);
         //if(tform.eulerAngles.x > maxTilt) {
         //    Debug.Log(tform.name + ": PASSED MAX TILT " + tform.eulerAngles.x);
         //}
@@ -71,12 +73,30 @@ public class CameraControl : MonoBehaviour {
     /// <param name="rotation">Rotation vector.</param>
     void RotateWorld(Transform tform, Vector3 rotation)
     {
-        //if (tform.eulerAngles.x > maxTilt) {
-        //    Debug.Log(tform.name + ": PASSED MAX TILT " + tform.eulerAngles.x);
-        //}
-        //else if (tform.eulerAngles.x < minTilt) {
-        //    Debug.Log(tform.name + ": PASSED MIN TILT " + tform.eulerAngles.x);
-        //}
+        Vector3 currentRotation = tform.eulerAngles;
+
+        if (currentRotation.x > 180) {
+            //Debug.Log("Reducing tilt from " + currentRotation.x + " to " + (currentRotation.x - 360));
+            currentRotation.x -= 360;
+        }
+
+        if (currentRotation.x + rotation.x > maxTilt) {
+            //Debug.Log(tform.name + ": PASSED MAX TILT " + (currentRotation.x + rotation.x));
+
+            // clamp current rotation between min tilt and max tilt
+            currentRotation.x = maxTilt;
+
+            // prevent user from looking down any further
+            rotation.x = Mathf.Clamp(rotation.x, -180, 0);
+
+        }
+        else if (currentRotation.x + rotation.x < minTilt) {
+
+            // clamp current rotation between min tilt and max tilt
+            currentRotation.x = minTilt;
+
+            rotation.x = Mathf.Clamp(rotation.x, 0, 180);
+        }
 
         rotation *= mouseSensitivity;
 
