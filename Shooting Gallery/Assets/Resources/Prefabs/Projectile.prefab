@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 23569550290064348}
   - component: {fileID: 135953423805404530}
   - component: {fileID: 54005945455761188}
+  - component: {fileID: 114189019551959056}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -131,6 +132,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &114189019551959056
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1301595499220988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c1642db4982e5947959318c8560eb92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationPerSecond: {x: 0, y: 0, z: 360}
+  startColor: {r: 0.18039216, g: 1, b: 0.9479455, a: 1}
+  endColor: {r: 0.29411766, g: 1, b: 0.4009434, a: 0.32941177}
 --- !u!135 &135953423805404530
 SphereCollider:
   m_ObjectHideFlags: 1
@@ -150,7 +165,7 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1072944152042940}
   serializedVersion: 5
-  lengthInSec: 5
+  lengthInSec: 1
   simulationSpeed: 1
   stopAction: 0
   looping: 1
