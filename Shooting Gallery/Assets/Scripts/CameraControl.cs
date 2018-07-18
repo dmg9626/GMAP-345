@@ -12,9 +12,9 @@ public class CameraControl : MonoBehaviour {
 
     public Transform gun;
 
-    public float minTilt;
+    public float topViewClamp;
 
-    public float maxTilt;
+    public float bottomViewClamp;
 	
 	// Update is called once per frame
 	void Update ()
@@ -46,60 +46,54 @@ public class CameraControl : MonoBehaviour {
     }
 
     /// <summary>
-    /// Rotates relative to local space
+    /// Rotates relative to local space (used primarily for horizontal look)
     /// </summary>
     /// <param name="tform">Transform to rotate.</param>
     /// <param name="rotation">Rotation vector.</param>
     void RotateLocal(Transform tform, Vector3 rotation)
     {
-        
-        //Debug.Log(tform.name + " yaw: " + tform.eulerAngles.y);
-        //if(tform.eulerAngles.x > maxTilt) {
-        //    Debug.Log(tform.name + ": PASSED MAX TILT " + tform.eulerAngles.x);
-        //}
-        //else if (tform.eulerAngles.x < minTilt) {
-        //    Debug.Log(tform.name + ": PASSED MIN TILT " + tform.eulerAngles.x);
-        //}
-
         rotation *= mouseSensitivity;
 
         tform.eulerAngles += rotation;
     }
 
     /// <summary>
-    /// Rotates relative to world space
+    /// Rotates relative to world space (used primarily for vertical look)
     /// </summary>
     /// <param name="tform">Transform to rotate.</param>
     /// <param name="rotation">Rotation vector.</param>
     void RotateWorld(Transform tform, Vector3 rotation)
     {
+        // Get current rotation between range 180 and -180
         Vector3 currentRotation = tform.eulerAngles;
 
         if (currentRotation.x > 180) {
-            //Debug.Log("Reducing tilt from " + currentRotation.x + " to " + (currentRotation.x - 360));
             currentRotation.x -= 360;
         }
 
-        if (currentRotation.x + rotation.x > maxTilt) {
-            //Debug.Log(tform.name + ": PASSED MAX TILT " + (currentRotation.x + rotation.x));
+        // Check if player is trying to look too low
+        if (currentRotation.x + rotation.x > bottomViewClamp) {
 
-            // clamp current rotation between min tilt and max tilt
-            currentRotation.x = maxTilt;
+            // Clamp current rotation between min tilt and max tilt
+            currentRotation.x = bottomViewClamp;
 
-            // prevent user from looking down any further
+            // Prevent user from looking down any further
             rotation.x = Mathf.Clamp(rotation.x, -180, 0);
-
         }
-        else if (currentRotation.x + rotation.x < minTilt) {
 
-            // clamp current rotation between min tilt and max tilt
-            currentRotation.x = minTilt;
+        // Check if player is trying to look too high
+        else if (currentRotation.x + rotation.x < topViewClamp) {
+
+            // Clamp current rotation between min tilt and max tilt
+            currentRotation.x = topViewClamp;
 
             rotation.x = Mathf.Clamp(rotation.x, 0, 180);
         }
 
+        // Scale rotation by mouse sensitivity
         rotation *= mouseSensitivity;
 
+        // Rotate transform
         tform.Rotate(rotation.x, rotation.y, rotation.z, Space.World);
     }
 }
