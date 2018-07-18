@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -34,15 +35,35 @@ public class Bazooka : MonoBehaviour {
     /// </summary>
     GameObject newProjectile;
 
+    /// <summary>
+    /// Amount of bullets in magazine
+    /// </summary>
+    public float clipSize;
+
+    /// <summary>
+    /// Current ammo count
+    /// </summary>
+    float currentAmmo;
+
+    /// <summary>
+    /// Duration of reloading
+    /// </summary>
+    public float reloadDuration;
+
 
 	// Use this for initialization
-	void Start () {
+	void Start ()
+    {
         // Allow player to fire at game start
         fireTimer = fireRate;
+
+        // Start with full mag of ammo
+        currentAmmo = clipSize;
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
         // Increment timer
         fireTimer += Time.deltaTime;
 
@@ -51,10 +72,30 @@ public class Bazooka : MonoBehaviour {
             
             // Fire on left mouse click
             if(Input.GetMouseButton(0)) {
-                Fire();
+
+                if(currentAmmo > 0) {
+                    Fire();
+                }
+                else {
+                    StartCoroutine(Reload());
+                }
             }
         }
 	}
+
+    /// <summary>
+    /// Sets currentAmmo to clipSize after waiting reloadDuration
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator Reload()
+    {
+        Debug.Log("Reloading gun...");
+
+        yield return new WaitForSeconds(reloadDuration);
+
+        currentAmmo = clipSize;
+        Debug.Log("Finished reloading");
+    }
 
     /// <summary>
     /// Fires a new projectile
@@ -72,5 +113,10 @@ public class Bazooka : MonoBehaviour {
 
         // Reset timer to start counting up to next shot
         fireTimer = 0;
+
+        // Decrement ammo count
+        currentAmmo--;
+
+        Debug.Log("Ammo left: " + currentAmmo);
     }
 }
