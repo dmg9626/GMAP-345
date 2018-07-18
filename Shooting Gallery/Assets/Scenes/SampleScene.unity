@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -471,6 +471,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1769985420}
   mouseSensitivity: 2
+  cameraTilt: {fileID: 2015616599}
+  minYaw: -70
+  maxYaw: 30
 --- !u!4 &484933640
 Transform:
   m_ObjectHideFlags: 0
@@ -1045,8 +1048,8 @@ MonoBehaviour:
   cController: {fileID: 1769985419}
   forward: {fileID: 484933640}
   moveSpeed: 5
-  jumpSpeed: 10
-  gravity: 9.8
+  jumpSpeed: 20
+  gravity: 1
 --- !u!143 &1769985419
 CharacterController:
   m_ObjectHideFlags: 0
