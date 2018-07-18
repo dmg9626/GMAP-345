@@ -9,6 +9,9 @@ public class Bazooka : MonoBehaviour {
     /// </summary>
     public float fireRate;
 
+    /// <summary>
+    /// Counts time until next shot
+    /// </summary>
     private float fireTimer;
 
     /// <summary>
@@ -26,6 +29,9 @@ public class Bazooka : MonoBehaviour {
     /// </summary>
     public float projectileSpeed;
 
+    /// <summary>
+    /// Next projectile to spawn
+    /// </summary>
     GameObject newProjectile;
 
 
@@ -50,21 +56,21 @@ public class Bazooka : MonoBehaviour {
         }
 	}
 
+    /// <summary>
+    /// Fires a new projectile
+    /// </summary>
     void Fire()
     {
         // Spawn new projectile
         newProjectile = Instantiate(projectile, fireLocation.position, fireLocation.rotation);
 
         // Fire it forward
-        newProjectile.GetComponent<Rigidbody>().AddForce(fireLocation.forward * projectileSpeed);
+        newProjectile.GetComponent<Rigidbody>().velocity = fireLocation.forward * projectileSpeed * Time.deltaTime;
 
         // Destroy after 5 seconds
         Destroy(newProjectile, 5);
-        ResetTimer();
-    }
 
-    void ResetTimer()
-    {
+        // Reset timer to start counting up to next shot
         fireTimer = 0;
     }
 }
