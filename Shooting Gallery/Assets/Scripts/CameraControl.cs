@@ -23,20 +23,25 @@ public class CameraControl : MonoBehaviour {
         float mouseX = Input.GetAxis("Mouse X");
         float mouseY = Input.GetAxis("Mouse Y");
 
+        Vector3 yaw = new Vector3(0, mouseX, 0);
+        Vector3 tilt = transform.TransformDirection(new Vector3(-mouseY, 0, 0));
+
         // Set position to player
         transform.position = player.position;
 
-        // Rotate plaeyr left/right
-        RotateLocal(player.transform, new Vector3(0, mouseX, 0));
-
-        // Rotate gun up/down
-        RotateWorld(gun.transform, transform.TransformDirection(new Vector3(-mouseY, 0, 0)));
-
-        // Camera tilt up/down
-        RotateWorld(cameraTilt.transform, transform.TransformDirection(new Vector3(-mouseY, 0, 0)));
+        // Rotate player left/right
+        RotateLocal(player.transform, yaw);
 
         // Camera yaw left/right
-        RotateLocal(transform, new Vector3(0, mouseX, 0));
+        RotateLocal(transform, yaw);
+
+        // Rotate gun up/down
+        RotateWorld(gun.transform, tilt);
+
+        // Camera tilt up/down
+        RotateWorld(cameraTilt.transform, tilt);
+
+        
     }
 
     /// <summary>
@@ -46,12 +51,12 @@ public class CameraControl : MonoBehaviour {
     /// <param name="rotation">Rotation vector.</param>
     void RotateLocal(Transform tform, Vector3 rotation)
     {
-        if(tform.eulerAngles.x > maxTilt) {
-            Debug.Log(tform.name + ": PASSED MAX TILT " + tform.eulerAngles.x);
-        }
-        else if (tform.eulerAngles.x < minTilt) {
-            Debug.Log(tform.name + ": PASSED MIN TILT " + tform.eulerAngles.x);
-        }
+        //if(tform.eulerAngles.x > maxTilt) {
+        //    Debug.Log(tform.name + ": PASSED MAX TILT " + tform.eulerAngles.x);
+        //}
+        //else if (tform.eulerAngles.x < minTilt) {
+        //    Debug.Log(tform.name + ": PASSED MIN TILT " + tform.eulerAngles.x);
+        //}
 
         rotation *= mouseSensitivity;
 
@@ -65,12 +70,12 @@ public class CameraControl : MonoBehaviour {
     /// <param name="rotation">Rotation vector.</param>
     void RotateWorld(Transform tform, Vector3 rotation)
     {
-        if (tform.eulerAngles.x > maxTilt) {
-            Debug.Log(tform.name + ": PASSED MAX TILT " + tform.eulerAngles.x);
-        }
-        else if (tform.eulerAngles.x < minTilt) {
-            Debug.Log(tform.name + ": PASSED MIN TILT " + tform.eulerAngles.x);
-        }
+        //if (tform.eulerAngles.x > maxTilt) {
+        //    Debug.Log(tform.name + ": PASSED MAX TILT " + tform.eulerAngles.x);
+        //}
+        //else if (tform.eulerAngles.x < minTilt) {
+        //    Debug.Log(tform.name + ": PASSED MIN TILT " + tform.eulerAngles.x);
+        //}
 
         rotation *= mouseSensitivity;
 
