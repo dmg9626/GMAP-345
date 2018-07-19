@@ -34,23 +34,22 @@ public class CharacterControl : MonoBehaviour {
     {
 
         Vector3 velocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * moveSpeed;
-
         if(cController.isGrounded) {
             // Jump
-            if(Input.GetKeyDown(KeyCode.Space)) {
+            if(Input.GetKey(KeyCode.Space)) {
                 Debug.Log("Jumping");
                 velocity.y = jumpSpeed;
             }
 
             // Apply downwards force while grounded to improve collision with ground
-            //else {
-            //    velocity.y = -1;
-            //}
+            else {
+               velocity.y = -1;
+            }
         }
         // Apply falling gravity
-        //else {
-            velocity.y -= gravity;
-        //}
+        else {
+            velocity.y = cController.velocity.y - gravity;
+        }
 
         // Move in direction of velocity
         cController.Move(forward.TransformDirection(velocity) * Time.deltaTime);
