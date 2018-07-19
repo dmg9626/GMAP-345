@@ -50,7 +50,12 @@ public class CameraControl : MonoBehaviour {
     /// <param name="rotation">Rotation vector.</param>
     void RotateLocal(Transform tform, Vector3 rotation)
     {
-        // Scale rotation by mouse sensitivity
+        if(rotation.x != 0) {
+            // Clamp rotation to vertical look limits
+            rotation = ClampRotation(tform, rotation);
+        }
+        
+        // Scale by mouse sensitivity
         rotation *= mouseSensitivity;
 
         // Directly apply local rotation to transform
@@ -63,6 +68,26 @@ public class CameraControl : MonoBehaviour {
     /// <param name="tform">Transform to rotate.</param>
     /// <param name="rotation">Rotation vector.</param>
     void RotateWorld(Transform tform, Vector3 rotation)
+    {
+        if(rotation.x != 0) {
+            // Clamp rotation to vertical look limits
+            rotation = ClampRotation(tform, rotation);
+        }
+
+        // Scale by mouse sensitivity
+        rotation *= mouseSensitivity;
+
+        // Rotate transform
+        tform.Rotate(rotation.x, rotation.y, rotation.z, Space.World);
+    }
+
+    /// <summary>
+    /// Clamps vertical rotation between topViewClamp and bottomViewClamp
+    /// </summary>
+    /// <param name="tform">Transform</param>
+    /// <param name="rotation">Raw rotation input</param>
+    /// <returns></returns>
+    Vector3 ClampRotation(Transform tform, Vector3 rotation) 
     {
         // Get current rotation between range 180 and -180
         Vector3 currentRotation = tform.eulerAngles;
@@ -90,10 +115,6 @@ public class CameraControl : MonoBehaviour {
             rotation.x = Mathf.Clamp(rotation.x, 0, 180);
         }
 
-        // Scale rotation by mouse sensitivity
-        rotation *= mouseSensitivity;
-
-        // Rotate transform
-        tform.Rotate(rotation.x, rotation.y, rotation.z, Space.World);
+        return rotation;
     }
 }
