@@ -25,24 +25,22 @@ public class CameraControl : MonoBehaviour {
 
         // Calculate camera yaw (left/right rotation) and tilt (up/down rotation)
         Vector3 yaw = new Vector3(0, mouseX, 0);
-        Vector3 tilt = transform.TransformDirection(new Vector3(-mouseY, 0, 0));
+        Vector3 tilt = new Vector3(-mouseY, 0, 0);
 
         // Set position to player
-        transform.position = player.position;
+        transform.position = Vector3.Lerp(transform.position, player.position, .25f);
 
         // Rotate player left/right
-        RotateLocal(player.transform, yaw);
+        RotateWorld(player.transform, yaw);
 
         // Camera yaw left/right
-        RotateLocal(transform, yaw);
+        RotateWorld(transform, yaw);
 
         // Rotate gun up/down
-        RotateWorld(gun.transform, tilt);
+        RotateLocal(gun.transform, tilt);
 
         // Camera tilt up/down
-        RotateWorld(cameraTilt.transform, tilt);
-
-        
+        RotateLocal(cameraTilt.transform, tilt);
     }
 
     /// <summary>
@@ -52,9 +50,11 @@ public class CameraControl : MonoBehaviour {
     /// <param name="rotation">Rotation vector.</param>
     void RotateLocal(Transform tform, Vector3 rotation)
     {
+        // Scale rotation by mouse sensitivity
         rotation *= mouseSensitivity;
 
-        tform.eulerAngles += rotation;
+        // Directly apply local rotation to transform
+        tform.localEulerAngles += rotation;
     }
 
     /// <summary>
