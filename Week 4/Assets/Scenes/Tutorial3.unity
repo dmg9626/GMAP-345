@@ -176,6 +176,7 @@ GameObject:
   m_Component:
   - component: {fileID: 262148563}
   - component: {fileID: 262148564}
+  - component: {fileID: 262148565}
   m_Layer: 0
   m_Name: PlayerSprite
   m_TagString: Untagged
@@ -241,6 +242,24 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!95 &262148565
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 262148562}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 76036ccf2651648fbab819c88b4a38e6, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &291733725
 GameObject:
   m_ObjectHideFlags: 0

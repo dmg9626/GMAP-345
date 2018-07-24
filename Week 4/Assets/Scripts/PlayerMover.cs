@@ -8,11 +8,14 @@ public class PlayerMover : MonoBehaviour
 
 	public float moveSpeed;
 
+	private Animator animator;
+
 	private Rigidbody2D rbody;
 
 	void Start () 
 	{
 		rbody = GetComponent<Rigidbody2D>();
+		animator = playerSprite.GetComponent<Animator>();
 	}
 	
 	void Update () 
@@ -44,6 +47,10 @@ public class PlayerMover : MonoBehaviour
 	{
 		if(movement.magnitude > 0) {
 			playerSprite.transform.localEulerAngles = Vector3.forward * HelperSingleton.instance.angleByVelocity[movement];
+			animator.SetBool("Moving", true);
+		}
+		else {
+			animator.SetBool("Moving", false);
 		}
 	}
 }
