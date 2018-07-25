@@ -44,9 +44,9 @@ public class TopDownMoveComponent : MoveComponent {
         currentDirection = DirectionHelper.VectorToDirection(input);
 
         // Animate walking if receiving input
-        if (input.x != 0f || input.y != 0f)
+        if (!currentDirection.Equals(BaseConstants.Direction.None))
         {
-            AnimateWalk(input);
+            AnimateMovement();
         }
     }
 
@@ -56,13 +56,21 @@ public class TopDownMoveComponent : MoveComponent {
     /// Animates movement based on horizontal/vertical input
     /// </summary>
     /// <param name="input">Player input</param>
-    protected void AnimateWalk(Vector2 input) 
+    protected void AnimateMovement() 
     {
         // Get current direction
-        // currentDirection = (BaseConstants.Direction)animator.GetInteger("Direction");
+        if(currentDirection == BaseConstants.Direction.Right) {
+            GetComponent<SpriteRenderer>().flipX = true;
+        }
+        else if(currentDirection == BaseConstants.Direction.Left) {
+            // Vector2 rotation = Vector2.zero;
+            // Quaternion rot = transform.rotation;
+            // rot.eulerAngles = rotation;
+            GetComponent<SpriteRenderer>().flipX = false;
+        }
 
         // Calculate and set new direction
-        BaseConstants.Direction newDirection = FaceDirection(input);
+        // BaseConstants.Direction newDirection = FaceDirection(input);
 
         // TODO: set direction by rotation, not animator
         // animator.SetInteger("Direction", (int)newDirection);
