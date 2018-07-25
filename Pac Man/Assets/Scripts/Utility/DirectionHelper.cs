@@ -63,6 +63,11 @@ public static class DirectionHelper
         }
     }
 
+    public static float? DirectionToRotation(BaseConstants.Direction direction)
+    {
+        return directionRotationMapping[direction];
+    }
+
     /// <summary>
 	/// Returns true if direction is vertical
 	/// </summary>
@@ -72,10 +77,11 @@ public static class DirectionHelper
         return (direction == BaseConstants.Direction.Up || direction == BaseConstants.Direction.Down);
     }
 
-    public static Dictionary<BaseConstants.Direction, float> directionRotationMapping = new Dictionary<BaseConstants.Direction, float> {
+    public static Dictionary<BaseConstants.Direction, float?> directionRotationMapping = new Dictionary<BaseConstants.Direction, float?> {
         {BaseConstants.Direction.Up, -90},
-        {BaseConstants.Direction.Left, 0},
         {BaseConstants.Direction.Down, 90},
-        {BaseConstants.Direction.Right, 180}
+        {BaseConstants.Direction.Right, 180},
+        {BaseConstants.Direction.Left, 0},
+        {BaseConstants.Direction.None, null}
     };
 }
