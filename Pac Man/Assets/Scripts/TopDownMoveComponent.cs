@@ -38,13 +38,12 @@ public class TopDownMoveComponent : MoveComponent {
         //    AnimateMovement();
         //}
 
-
-
+        
         Vector2 input = GetInput();
 
         BaseConstants.Direction direction = DirectionHelper.VectorToDirection(input);
 
-        if (direction != BaseConstants.Direction.None && CanMove(direction)) {
+        if (direction != BaseConstants.Direction.None) {
             Debug.Log("Can move " + direction);
 
             Move(direction);
@@ -56,6 +55,9 @@ public class TopDownMoveComponent : MoveComponent {
         }
     }
 
+    /// <summary>
+    /// Returns player input from arrow keys/WASD
+    /// </summary>
     protected Vector2 GetInput()
     {
         // Get player input
@@ -76,6 +78,10 @@ public class TopDownMoveComponent : MoveComponent {
         return input;
     }
 
+    /// <summary>
+    /// Moves player in specified direction.
+    /// </summary>
+    /// <param name="direction">The direction.</param>
     protected void Move(BaseConstants.Direction direction)
     {
         // Move actor in direction of input
@@ -87,26 +93,25 @@ public class TopDownMoveComponent : MoveComponent {
     }
 
 
+    //private void OnTriggerEnter2D(Collider2D collision)
+    //{
+    //    Intersection intersection = collision.gameObject.GetComponent<Intersection>();
+    //    if (intersection != null) {
+    //        Debug.Log("Reached intersection: " + intersection.name);
+    //        Debug.Log("Valid directions: " + intersection.validDirections.Count);
 
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        Intersection intersection = collision.gameObject.GetComponent<Intersection>();
-        if (intersection != null) {
-            Debug.Log("Reached intersection: " + intersection.name);
-            Debug.Log("Valid directions: " + intersection.validDirections.Count);
+    //        this.intersection = intersection;
 
-            this.intersection = intersection;
+    //        if(!CanMove(currentDirection)) {
+    //            Move(BaseConstants.Direction.None);
+    //        }
+    //    }
+    //}
 
-            if(!CanMove(currentDirection)) {
-                Move(BaseConstants.Direction.None);
-            }
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        intersection = null;
-    }
+    //private void OnTriggerExit2D(Collider2D collision)
+    //{
+    //    intersection = null;
+    //}
 
     /// <summary>
     /// Returns true if player can move in given direction at this intersection, false otherwise
@@ -121,7 +126,6 @@ public class TopDownMoveComponent : MoveComponent {
         return false;
     }
 
-    
 
     /// <summary>
     /// Animates movement based on horizontal/vertical input
@@ -132,53 +136,9 @@ public class TopDownMoveComponent : MoveComponent {
         // Calculcate angle of rotation based on current direction
         Vector3 rotation = new Vector3(0, 0, DirectionHelper.DirectionToRotation(currentDirection) ?? 0);
 
-        // Assign to quaternion.eulerAngles
+        // Assign rotation to quaternion.eulerAngles
         Quaternion rot = transform.rotation;
         rot.eulerAngles = rotation;
         transform.rotation = rot;
-    }
-
-    /// <summary>
-    /// Calculates direction for player to face based on horizontal/vertical input
-    /// </summary>
-    /// <param name="horizontal">Horizontal input</param>
-    /// <param name="vertical">Vertical input</param>
-    /// <returns>Direction to face</returns>
-    protected BaseConstants.Direction FaceDirection(Vector2 input)
-    {
-        // If moving diagonally, continue facing along axis of currentDirection
-        if(input.x != 0 && input.y != 0){
-            if(DirectionHelper.IsVertical(currentDirection)) {
-                return ParseInput(input.y, false);
-            }
-            else {
-                return ParseInput(input.x, true);
-            }
-        }
-
-        // Otherwise face in direction of raw input
-        else if(input.x != 0) {
-            return ParseInput(input.x, true);
-        }
-        else if(input.y != 0) {
-            return ParseInput(input.y, false);
-        }
-
-        return currentDirection;
-    }
-
-    /// <summary>
-    /// Parses a float representing player input (horizontal or vertical axis) and returns corresponding direction
-    /// </summary>
-    /// <param name="input">Player input on horizontal/vertical axis</param>
-    /// <param name="horizontal">True if input direction is horizontal, false if vertical</param>
-    protected BaseConstants.Direction ParseInput(float input, bool horizontal)
-    {
-        if (input > 0) {
-            return horizontal ? BaseConstants.Direction.Right : BaseConstants.Direction.Up;
-        }
-        else {
-            return horizontal ? BaseConstants.Direction.Left : BaseConstants.Direction.Down;
-        }
     }
 }
