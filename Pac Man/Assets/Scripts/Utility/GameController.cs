@@ -73,6 +73,11 @@ public class GameController : MonoBehaviour {
     public int powerUpScore;
 
     /// <summary>
+    /// Power up move speed increase
+    /// </summary>
+    public float powerUpSpeedIncrease;
+
+    /// <summary>
     /// Score granted for each ghost killed
     /// </summary>
     public int ghostKillScore;

@@ -26,10 +26,10 @@ public class MoveComponent : MonoBehaviour {
 	/// </summary>
 	protected Animator animator;
 
-	/// <summary>
-	/// Direction player is currently facing
-	/// </summary>
-	public BaseConstants.Direction currentDirection { get; protected set;}
+    /// <summary>
+    /// Direction player is currently facing
+    /// </summary>
+    public BaseConstants.Direction currentDirection;
 
 	protected void Start()
 	{

@@ -89,17 +89,28 @@ public class PacManMoveComponent : MoveComponent {
         if (collider.gameObject.GetComponent<Pellet>()) {
             Pellet pellet = collider.gameObject.GetComponent<Pellet>();
 
+            // Boost speed/points gained if powerup
             if (pellet.powerUp) {
                 Debug.Log("Granting player " + gameController.pelletScore + " points");
                 score += gameController.powerUpScore;
+
+                moveSpeed += gameController.powerUpSpeedIncrease;
             }
             else {
                 score += gameController.pelletScore;
             }
             
+            // Set pellet inactive
             collider.gameObject.SetActive(false);
-            scoreText.text = score.ToString();
 
+            // Update score on UI
+            scoreText.text = score.ToString();
+        }
+        else if (collider.gameObject.GetComponent<Warp>()) {
+            Warp warp = collider.gameObject.GetComponent<Warp>();
+
+            Debug.Log("Warping to " + warp.destination.name);
+            transform.position = warp.destination.position;
         }
     }
 
@@ -108,17 +119,17 @@ public class PacManMoveComponent : MoveComponent {
 
     //private void OnTriggerEnter2D(Collider2D collision)
     //{
-    //    Intersection intersection = collision.gameObject.GetComponent<Intersection>();
-    //    if (intersection != null) {
-    //        Debug.Log("Reached intersection: " + intersection.name);
-    //        Debug.Log("Valid directions: " + intersection.validDirections.Count);
+        //Intersection intersection = collision.gameObject.GetComponent<Intersection>();
+        //if (intersection != null) {
+        //    Debug.Log("Reached intersection: " + intersection.name);
+        //    Debug.Log("Valid directions: " + intersection.validDirections.Count);
 
-    //        this.intersection = intersection;
+        //    this.intersection = intersection;
 
-    //        if(!CanMove(currentDirection)) {
-    //            Move(BaseConstants.Direction.None);
-    //        }
-    //    }
+        //    if (!CanMove(currentDirection)) {
+        //        Move(BaseConstants.Direction.None);
+        //    }
+        //}
     //}
 
     //private void OnTriggerExit2D(Collider2D collision)
