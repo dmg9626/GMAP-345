@@ -62,4 +62,19 @@ public class GameController : MonoBehaviour {
     /// </summary>
     public static PlayerController PlayerController { get; private set; }
 
+    /// <summary>
+    /// Score granted for each pellet obtained
+    /// </summary>
+    public int pelletScore;
+
+    /// <summary>
+    /// Score granted for each power up obtained
+    /// </summary>
+    public int powerUpScore;
+
+    /// <summary>
+    /// Score granted for each ghost killed
+    /// </summary>
+    public int ghostKillScore;
+
 }

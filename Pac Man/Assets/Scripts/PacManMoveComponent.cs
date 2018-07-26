@@ -6,6 +6,8 @@ public class PacManMoveComponent : MoveComponent {
 
     private Rigidbody2D rbody;
 
+    private GameController gameController;
+
     public Intersection intersection;
 
 	// Use this for initialization
@@ -15,6 +17,8 @@ public class PacManMoveComponent : MoveComponent {
         animator.speed = animateSpeed;
 
         rbody = GetComponent<Rigidbody2D>();
+
+        gameController = GameController.FindObjectOfType<GameController>();
     }
 
     /// <summary>
@@ -23,22 +27,6 @@ public class PacManMoveComponent : MoveComponent {
     override
     public void ManageMovement()
     {
-        //Vector2 input = GetInput();
-
-        //// Move actor in direction of input
-        //Vector2 movement = input * moveSpeed;
-        //rbody.velocity = movement;
-
-        //// Save direction to use next frame
-        //currentDirection = DirectionHelper.VectorToDirection(input);
-
-        //// Animate walking if receiving input
-        //if (!currentDirection.Equals(BaseConstants.Direction.None))
-        //{
-        //    AnimateMovement();
-        //}
-
-        
         Vector2 input = GetInput();
 
         BaseConstants.Direction direction = DirectionHelper.VectorToDirection(input);
@@ -91,6 +79,17 @@ public class PacManMoveComponent : MoveComponent {
         // Save direction to use next frame
         currentDirection = direction;
     }
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.GetComponent<Pellet>()) {
+            Debug.Log("Granting player " + gameController.pelletScore + " points");
+            collider.gameObject.SetActive(false);
+
+        }
+    }
+
+
 
 
     //private void OnTriggerEnter2D(Collider2D collision)
