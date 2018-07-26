@@ -91,7 +91,6 @@ public class PacManMoveComponent : MoveComponent {
 
             // Boost speed/points gained if powerup
             if (pellet.powerUp) {
-                Debug.Log("Granting player " + gameController.pelletScore + " points");
                 score += gameController.powerUpScore;
 
                 moveSpeed += gameController.powerUpSpeedIncrease;
@@ -102,9 +101,16 @@ public class PacManMoveComponent : MoveComponent {
             
             // Set pellet inactive
             collider.gameObject.SetActive(false);
-
-            // Update score on UI
-            scoreText.text = score.ToString();
+            
+            if (GameObject.FindObjectOfType<Pellet>() == null) {
+                // Display win message
+                Debug.Log("you found all the pellets!");
+                scoreText.text = "You Win!";
+            }
+            else {
+                // Update score text
+                scoreText.text = score.ToString();
+            }
         }
         else if (collider.gameObject.GetComponent<Warp>()) {
             Warp warp = collider.gameObject.GetComponent<Warp>();
