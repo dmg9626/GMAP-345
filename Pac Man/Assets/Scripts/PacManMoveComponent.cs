@@ -100,40 +100,49 @@ public class PacManMoveComponent : MoveComponent {
     {
         // Check if pellet
         if (collider.gameObject.GetComponent<Pellet>()) {
-            Pellet pellet = collider.gameObject.GetComponent<Pellet>();
-
-            // Boost speed/points gained if powerup
-            if (pellet.powerUp) {
-                score += gameController.powerUpScore;
-
-                moveSpeed += gameController.powerUpSpeedIncrease;
-            }
-            else {
-                score += gameController.pelletScore;
-            }
-
-            // Set pellet inactive
-            collider.gameObject.SetActive(false);
-
-            if (!PelletsLeft()) {
-                // Display win message
-                Debug.Log("you found all the pellets!");
-                scoreText.text = "You Win!";
-
-                audioSource.PlayOneShot(audioSource.clip);
-
-                InvokeRepeating("FadeIn", Time.deltaTime, Time.deltaTime);
-            }
-            else {
-                // Update score text
-                scoreText.text = score.ToString();
-            }
+            HandlePellet(collider.gameObject.GetComponent<Pellet>());
         }
+
+        // Check if warp pipe
         else if (collider.gameObject.GetComponent<Warp>()) {
             Warp warp = collider.gameObject.GetComponent<Warp>();
 
             Debug.Log("Warping to " + warp.destination.name);
             transform.position = warp.destination.position;
+        }
+    }
+
+    /// <summary>
+    /// Called when player collides with pellet
+    /// </summary>
+    /// <param name="pellet">The pellet.</param>
+    protected void HandlePellet(Pellet pellet)
+    {
+        // Boost speed/points gained if powerup
+        if (pellet.powerUp) {
+            score += gameController.powerUpScore;
+
+            moveSpeed += gameController.powerUpSpeedIncrease;
+        }
+        else {
+            score += gameController.pelletScore;
+        }
+
+        // Set pellet inactive
+        pellet.gameObject.SetActive(false);
+
+        if (!PelletsLeft()) {
+            // Display win message
+            Debug.Log("you found all the pellets!");
+            //scoreText.text = "You Win!";
+
+            audioSource.PlayOneShot(audioSource.clip);
+
+            InvokeRepeating("FadeIn", Time.deltaTime, Time.deltaTime);
+        }
+        else {
+            // Update score text
+            scoreText.text = score.ToString();
         }
     }
 
@@ -166,16 +175,24 @@ public class PacManMoveComponent : MoveComponent {
         transform.rotation = rot;
     }
 
+    /// <summary>
+    /// Slowly fades in image of scott pilgrim
+    /// </summary>
     protected void FadeIn()
     {
         SetAlpha(scott, scott.color.a + ((fadeDelta / audioSource.clip.length) * Time.deltaTime));
 
+        // Quit game when audio clip done playing
         if(!audioSource.isPlaying) {
-            Debug.Log("Finished playing");
             Application.Quit();
         }
     }
 
+    /// <summary>
+    /// Sets alpha value of image to given value
+    /// </summary>
+    /// <param name="image">The image.</param>
+    /// <param name="alpha">The alpha.</param>
     protected void SetAlpha(Image image, float alpha)
     {
         Color color = image.color;
@@ -185,8 +202,12 @@ public class PacManMoveComponent : MoveComponent {
         scott.color = color;
     }
 
+    /// <summary>
+    /// Returns true if pellets are left on the board, false otherwise
+    /// </summary>
+    /// <returns></returns>
     bool PelletsLeft()
     {
-        return GameObject.FindObjectOfType<Pellet>() == null;
+        return GameObject.FindObjectOfType<Pellet>() != null;
     }
 }
