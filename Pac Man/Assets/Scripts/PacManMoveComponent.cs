@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PacManMoveComponent : MoveComponent {
 
@@ -10,8 +11,12 @@ public class PacManMoveComponent : MoveComponent {
 
     public Intersection intersection;
 
-	// Use this for initialization
-	void Start () {
+    public int score;
+
+    public Text scoreText;
+
+    // Use this for initialization
+    void Start () {
         base.Start();
 
         animator.speed = animateSpeed;
@@ -32,8 +37,6 @@ public class PacManMoveComponent : MoveComponent {
         BaseConstants.Direction direction = DirectionHelper.VectorToDirection(input);
 
         if (direction != BaseConstants.Direction.None) {
-            Debug.Log("Can move " + direction);
-
             Move(direction);
 
             // Animate walking if receiving input
@@ -82,9 +85,20 @@ public class PacManMoveComponent : MoveComponent {
 
     private void OnTriggerEnter2D(Collider2D collider)
     {
+        // Check if pellet
         if (collider.gameObject.GetComponent<Pellet>()) {
-            Debug.Log("Granting player " + gameController.pelletScore + " points");
+            Pellet pellet = collider.gameObject.GetComponent<Pellet>();
+
+            if (pellet.powerUp) {
+                Debug.Log("Granting player " + gameController.pelletScore + " points");
+                score += gameController.powerUpScore;
+            }
+            else {
+                score += gameController.pelletScore;
+            }
+            
             collider.gameObject.SetActive(false);
+            scoreText.text = score.ToString();
 
         }
     }
