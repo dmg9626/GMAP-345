@@ -122,7 +122,7 @@ public class PacManMoveComponent : MoveComponent {
         if (pellet.powerUp) {
             score += gameController.powerUpScore;
 
-            moveSpeed += gameController.powerUpSpeedIncrease;
+            //moveSpeed += gameController.powerUpSpeedIncrease;
         }
         else {
             score += gameController.pelletScore;
