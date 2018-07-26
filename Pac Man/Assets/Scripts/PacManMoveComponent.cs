@@ -15,8 +15,14 @@ public class PacManMoveComponent : MoveComponent {
 
     public Text scoreText;
 
+    public AudioSource audioSource;
+
+    public Image scott;
+
+    public float fadeDelta;
+
     // Use this for initialization
-    void Start () {
+    void Start() {
         base.Start();
 
         animator.speed = animateSpeed;
@@ -24,6 +30,13 @@ public class PacManMoveComponent : MoveComponent {
         rbody = GetComponent<Rigidbody2D>();
 
         gameController = GameController.FindObjectOfType<GameController>();
+
+        SetAlpha(scott, 0);
+
+        if(!PelletsLeft()) {
+            InvokeRepeating("FadeIn", Time.deltaTime, Time.deltaTime);
+            audioSource.PlayOneShot(audioSource.clip);
+        }
     }
 
     /// <summary>
@@ -98,14 +111,18 @@ public class PacManMoveComponent : MoveComponent {
             else {
                 score += gameController.pelletScore;
             }
-            
+
             // Set pellet inactive
             collider.gameObject.SetActive(false);
-            
-            if (GameObject.FindObjectOfType<Pellet>() == null) {
+
+            if (!PelletsLeft()) {
                 // Display win message
                 Debug.Log("you found all the pellets!");
                 scoreText.text = "You Win!";
+
+                audioSource.PlayOneShot(audioSource.clip);
+
+                InvokeRepeating("FadeIn", Time.deltaTime, Time.deltaTime);
             }
             else {
                 // Update score text
@@ -120,29 +137,6 @@ public class PacManMoveComponent : MoveComponent {
         }
     }
 
-
-
-
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-        //Intersection intersection = collision.gameObject.GetComponent<Intersection>();
-        //if (intersection != null) {
-        //    Debug.Log("Reached intersection: " + intersection.name);
-        //    Debug.Log("Valid directions: " + intersection.validDirections.Count);
-
-        //    this.intersection = intersection;
-
-        //    if (!CanMove(currentDirection)) {
-        //        Move(BaseConstants.Direction.None);
-        //    }
-        //}
-    //}
-
-    //private void OnTriggerExit2D(Collider2D collision)
-    //{
-    //    intersection = null;
-    //}
-
     /// <summary>
     /// Returns true if player can move in given direction at this intersection, false otherwise
     /// </summary>
@@ -150,7 +144,7 @@ public class PacManMoveComponent : MoveComponent {
     /// <param name="intersection">The intersection.</param>
     protected bool CanMove(BaseConstants.Direction direction)
     {
-        if(intersection != null) {
+        if (intersection != null) {
             return intersection.validDirections.Contains(direction);
         }
         return false;
@@ -161,7 +155,7 @@ public class PacManMoveComponent : MoveComponent {
     /// Animates movement based on horizontal/vertical input
     /// </summary>
     /// <param name="input">Player input</param>
-    protected void AnimateMovement() 
+    protected void AnimateMovement()
     {
         // Calculcate angle of rotation based on current direction
         Vector3 rotation = new Vector3(0, 0, DirectionHelper.DirectionToRotation(currentDirection) ?? 0);
@@ -170,5 +164,29 @@ public class PacManMoveComponent : MoveComponent {
         Quaternion rot = transform.rotation;
         rot.eulerAngles = rotation;
         transform.rotation = rot;
+    }
+
+    protected void FadeIn()
+    {
+        SetAlpha(scott, scott.color.a + ((fadeDelta / audioSource.clip.length) * Time.deltaTime));
+
+        if(!audioSource.isPlaying) {
+            Debug.Log("Finished playing");
+            Application.Quit();
+        }
+    }
+
+    protected void SetAlpha(Image image, float alpha)
+    {
+        Color color = image.color;
+        color.a = alpha;
+        //color.r += alpha;
+
+        scott.color = color;
+    }
+
+    bool PelletsLeft()
+    {
+        return GameObject.FindObjectOfType<Pellet>() == null;
     }
 }
